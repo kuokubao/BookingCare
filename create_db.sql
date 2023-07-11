@@ -22,16 +22,9 @@ CREATE TABLE doctor (
   name VARCHAR(30),
   specialization VARCHAR(50),
   phone VARCHAR(10),
-  email VARCHAR(50),
-  admin_id INT,
-  FOREIGN KEY (admin_id) REFERENCES admin(admin_id)
+  email VARCHAR(50)
 );
-CREATE TABLE service (
-  service_id serial PRIMARY KEY,
-  fee INT,
-  description TEXT,
-  name VARCHAR(50)
-);
+
 CREATE TABLE disease (
   disease_id serial PRIMARY KEY,
   name VARCHAR(50),
@@ -45,10 +38,9 @@ CREATE TABLE appointment (
   admin_id INT,
   appointment_date DATE,
   appointment_time TIME,
-  status VARCHAR(50),
+  status INT,
   FOREIGN KEY (patient_id) REFERENCES patient(patient_id),
-  FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id),
-  FOREIGN KEY (admin_id) REFERENCES admin(admin_id)
+  FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id)
 );
 CREATE TABLE medical_record (
   medical_record_id serial PRIMARY KEY,
@@ -63,11 +55,4 @@ CREATE TABLE medical_record (
   FOREIGN KEY (patient_id) REFERENCES patient(patient_id),
   FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id),
   FOREIGN KEY (disease_id) REFERENCES disease(disease_id),
-  FOREIGN KEY (service_id) REFERENCES service(service_id),
-  FOREIGN KEY (admin_id) REFERENCES admin(admin_id)
 );
-
-
-ALTER TABLE patient
-ADD COLUMN admin_id INT,
-ADD FOREIGN KEY (admin_id) REFERENCES admin(admin_id);
