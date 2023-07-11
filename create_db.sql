@@ -54,5 +54,5 @@ CREATE TABLE medical_record (
   notes TEXT,
   FOREIGN KEY (patient_id) REFERENCES patient(patient_id),
   FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id),
-  FOREIGN KEY (disease_id) REFERENCES disease(disease_id),
+  FOREIGN KEY (disease_id) REFERENCES disease(disease_id)
 );
