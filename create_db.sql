@@ -1,110 +1,73 @@
--- Tạo bảng "Tài khoản người dùng"
-CREATE TABLE user_account (
-  user_id SERIAL PRIMARY KEY,
-  username VARCHAR(255),
-  password VARCHAR(255)
-);
-
--- Tạo bảng "Bác sĩ"
-CREATE TABLE doctor (
-  doctor_id SERIAL PRIMARY KEY,
-  user_id INT,
-  name VARCHAR(255),
-  specialization VARCHAR(255),
-  phone VARCHAR(255),
-  FOREIGN KEY (user_id) REFERENCES user_account(user_id)
-);
-
--- Tạo bảng "Bệnh nhân"
 CREATE TABLE patient (
-  patient_id SERIAL PRIMARY KEY,
-  user_id INT,
-  name VARCHAR(255),
-  age INT,
-  gender VARCHAR(255),
-  address VARCHAR(255),
-  phone VARCHAR(255),
-  FOREIGN KEY (user_id) REFERENCES user_account(user_id)
+  patient_id serial PRIMARY KEY,
+  email varchar(100),
+  password varchar(30),
+  name varchar(30),
+  age integer,
+  gender char(1),
+  address varchar(100),
+  phone varchar(10)
 );
 
--- Tạo bảng "Admin"
 CREATE TABLE admin (
-  admin_id SERIAL PRIMARY KEY,
-  user_id INT,
-  name VARCHAR(255),
-  FOREIGN KEY (user_id) REFERENCES user_account(user_id)
+  admin_id serial PRIMARY KEY,
+  name varchar(30),
+  email varchar(50) NOT NULL,
+  password varchar(30) NOT NULL
 );
 
--- Tạo bảng "Lịch hẹn"
+CREATE TABLE doctor (
+  doctor_id serial PRIMARY KEY,
+  password VARCHAR(30),
+  name VARCHAR(30),
+  specialization VARCHAR(50),
+  phone VARCHAR(10),
+  email VARCHAR(50),
+  admin_id INT,
+  FOREIGN KEY (admin_id) REFERENCES admin(admin_id)
+);
+CREATE TABLE service (
+  service_id serial PRIMARY KEY,
+  fee INT,
+  description TEXT,
+  name VARCHAR(50)
+);
+CREATE TABLE disease (
+  disease_id serial PRIMARY KEY,
+  name VARCHAR(50),
+  dos VARCHAR(250),
+  donts VARCHAR(250)
+);
 CREATE TABLE appointment (
-  appointment_id SERIAL PRIMARY KEY,
+  appointment_id serial PRIMARY KEY,
   patient_id INT,
   doctor_id INT,
+  admin_id INT,
   appointment_date DATE,
   appointment_time TIME,
+  status VARCHAR(50),
   FOREIGN KEY (patient_id) REFERENCES patient(patient_id),
-  FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id)
+  FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id),
+  FOREIGN KEY (admin_id) REFERENCES admin(admin_id)
 );
-
--- Tạo bảng "Dịch vụ"
-CREATE TABLE service (
-  service_id SERIAL PRIMARY KEY,
-  name VARCHAR(255),
-  description VARCHAR(255),
-  fee INT
-);
-
--- Tạo bảng "Vai trò"
-CREATE TABLE role (
-  role_id SERIAL PRIMARY KEY,
-  role_name VARCHAR(255)
-);
-
--- Tạo bảng "Bệnh án"
 CREATE TABLE medical_record (
-  medical_record_id SERIAL PRIMARY KEY,
+  medical_record_id serial PRIMARY KEY,
+  admin_id INT,
   patient_id INT,
   doctor_id INT,
   disease_id INT,
-  diagnosis VARCHAR(255),
-  prescription VARCHAR(255),
-  notes VARCHAR(255),
+  service_id INT,
+  diagnosis VARCHAR(50),
+  prescription VARCHAR(50),
+  notes TEXT,
   FOREIGN KEY (patient_id) REFERENCES patient(patient_id),
   FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id),
-  FOREIGN KEY (disease_id) REFERENCES disease(disease_id)
+  FOREIGN KEY (disease_id) REFERENCES disease(disease_id),
+  FOREIGN KEY (service_id) REFERENCES service(service_id),
+  FOREIGN KEY (admin_id) REFERENCES admin(admin_id)
 );
 
--- Tạo bảng "Role_User"
-CREATE TABLE role_user (
-  user_id INT,
-  role_id INT,
-  FOREIGN KEY (user_id) REFERENCES user_account(user_id),
-  FOREIGN KEY (role_id) REFERENCES role(role_id)
-);
--- Thêm quan hệ một-nhiều giữa bảng "Bác sĩ" và bảng "Lịch hẹn"
-ALTER TABLE appointment ADD COLUMN doctor_id INT;
-ALTER TABLE appointment ADD FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id);
 
--- Thêm quan hệ một-nhiều giữa bảng "Bệnh nhân" và bảng "Lịch hẹn"
-ALTER TABLE appointment ADD COLUMN patient_id INT;
-ALTER TABLE appointment ADD FOREIGN KEY (patient_id) REFERENCES patient(patient_id);
-
--- Thêm quan hệ một-nhiều giữa bảng "Bệnh án" và bảng "Lịch hẹn"
-ALTER TABLE medical_record ADD COLUMN appointment_id INT;
-ALTER TABLE medical_record ADD FOREIGN KEY (appointment_id) REFERENCES appointment(appointment_id);
-
--- Thêm quan hệ một-nhiều giữa bảng "Bệnh án" và bảng "Bệnh"
-ALTER TABLE medical_record ADD COLUMN disease_id INT;
-ALTER TABLE medical_record ADD FOREIGN KEY (disease_id) REFERENCES disease(disease_id);
-
--- Thêm quan hệ một-nhiều giữa bảng "Bệnh án" và bảng "Dịch vụ"
-ALTER TABLE medical_record ADD COLUMN service_id INT;
-ALTER TABLE medical_record ADD FOREIGN KEY (service_id) REFERENCES service(service_id);
-
--- Thêm quan hệ một-nhiều giữa bảng "Tài khoản người dùng" và bảng "Role_User"
-ALTER TABLE role_user ADD COLUMN user_id INT;
-ALTER TABLE role_user ADD FOREIGN KEY (user_id) REFERENCES user_account(user_id);
-
--- Thêm quan hệ một-nhiều giữa bảng "Vai trò" và bảng "Role_User"
-ALTER TABLE role_user ADD COLUMN role_id INT;
-ALTER TABLE role_user ADD FOREIGN KEY (role_id) REFERENCES role(role_id);
+ALTER TABLE patient
+ADD COLUMN admin_id INT,
+ADD FOREIGN KEY (admin_id) REFERENCES admin(admin_id);
