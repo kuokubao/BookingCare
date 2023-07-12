@@ -1,6 +1,6 @@
 CREATE TABLE patient (
   patient_id serial PRIMARY KEY,
-  email varchar(100),
+  email varchar(100) UNIQUE,
   password varchar(30),
   name varchar(30),
   age integer,
@@ -12,7 +12,7 @@ CREATE TABLE patient (
 CREATE TABLE admin (
   admin_id serial PRIMARY KEY,
   name varchar(30),
-  email varchar(50) NOT NULL,
+  email varchar(50) UNIQUE,
   password varchar(30) NOT NULL
 );
 
@@ -22,7 +22,7 @@ CREATE TABLE doctor (
   name VARCHAR(30),
   specialization VARCHAR(50),
   phone VARCHAR(10),
-  email VARCHAR(50)
+  email VARCHAR(50) UNIQUE
 );
 
 CREATE TABLE disease (
