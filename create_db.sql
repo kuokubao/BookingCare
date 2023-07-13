@@ -24,6 +24,18 @@ CREATE TABLE doctor (
   phone VARCHAR(10),
   email VARCHAR(50) UNIQUE
 );
+CREATE TABLE specialization (
+  specialization_id serial PRIMARY KEY,
+  specialization_name varchar(50)
+);
+
+CREATE TABLE doctor_specialization (
+  doctor_id INT,
+  specialization_id INT,
+  PRIMARY KEY (doctor_id, specialization_id),
+  FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id),
+  FOREIGN KEY (specialization_id) REFERENCES specialization(specialization_id)
+);
 
 CREATE TABLE disease (
   disease_id serial PRIMARY KEY,
@@ -52,5 +64,6 @@ CREATE TABLE medical_record (
   notes TEXT,
   FOREIGN KEY (patient_id) REFERENCES patient(patient_id),
   FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id),
-  FOREIGN KEY (disease_id) REFERENCES disease(disease_id)
+  FOREIGN KEY (disease_id) REFERENCES disease(disease_id) ON DELETE SET NULL
+
 );
