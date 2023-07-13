@@ -101,3 +101,12 @@ BEGIN
     WHERE medical_record_id = p_medical_record_id;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Cập nhật thông tin bệnh nhân với patient_id = 1 chỉ cập nhật trường name và address
+SELECT update_patient_info_by_id(1, 'Pham Van Cuong', NULL, NULL, '789 Xa Dan, Ha Noi', NULL, NULL);
+
+-- Cập nhật thông tin bác sĩ với doctor_id = 1 chỉ cập nhật trường specialization và password
+SELECT update_doctor_info_by_id(1, NULL, 'Noi khoa', NULL, NULL, 'newpassword');
+
+-- Cập nhật thông tin hồ sơ bệnh án với medical_record_id = 1 chỉ cập nhật trường diagnosis và prescription
+SELECT update_medical_record_by_id(1, NULL, NULL, NULL, NULL, 'Chuan doan', 'Ke don', NULL);
