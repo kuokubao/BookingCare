@@ -35,7 +35,6 @@ CREATE TABLE appointment (
   appointment_id serial PRIMARY KEY,
   patient_id INT,
   doctor_id INT,
-  admin_id INT,
   appointment_date DATE,
   appointment_time TIME,
   status INT,
@@ -44,7 +43,6 @@ CREATE TABLE appointment (
 );
 CREATE TABLE medical_record (
   medical_record_id serial PRIMARY KEY,
-  admin_id INT,
   patient_id INT,
   doctor_id INT,
   disease_id INT,
