@@ -49,9 +49,11 @@ CREATE TABLE medical_record (
   service_id INT,
   diagnosis VARCHAR(50),
   prescription VARCHAR(50),
-  notes TEXT,
+  notes VARCHAR(255),
   FOREIGN KEY (patient_id) REFERENCES patient(patient_id),
   FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id),
+  FOREIGN KEY (patient_id) REFERENCES appointment(patient_id),
+  FOREIGN KEY (doctor_id) REFERENCES appointment(doctor_id),
   FOREIGN KEY (disease_id) REFERENCES disease(disease_id) ON DELETE SET NULL
 
 );
