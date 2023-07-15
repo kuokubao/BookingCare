@@ -1,5 +1,6 @@
 import express from "express";
 import homeController from '../controller/homecontroller';
+import userController from "../controller/userController";
 import multer from "multer";
 import path from "path";
 let approot = require('app-root-path');
@@ -27,12 +28,20 @@ let upload = multer({ storage: storage, fileFilter: imageFilter });
 let upload_Multiple_Files = multer({ storage: storage, fileFilter: imageFilter }).array('multiple image', 3);
 const initWebRoute = (app) => {
     router.get('/', homeController.getHomepage);
-    router.get('/detail/user/:id', homeController.getDetailPage);
+    router.get('/doctor', homeController.getHomeDoctor);
+    router.get('/appointment', homeController.getAppointment);
+    router.get('/medical', homeController.getMeidicalRecord);
+    router.get('/detail/user/:patient_id', homeController.getDetailPage);
     router.post('/create-new-user', homeController.createNewUser);
+    router.post('/create-new-doctor', homeController.createNewDoctor);
     router.post("/delete-user", homeController.deleteUser);
-    router.get("/edit-user/:id", homeController.editUser);
+    router.post("/delete-doctor", homeController.deleteDoctor);
+    router.get("/edit-user/:patient_id", homeController.editUser);
+    router.get("/doctor/edit-doctor/:doctor_id", homeController.editDoctor);
     router.post("/update-user", homeController.postUpdateUser)
+    router.post("/doctor/update-doctor", homeController.postUpdateDoctor)
     router.get("/upload", homeController.getUploadFilePage)
+    router.post("/api/login", userController.handleLogin)
     router.post("/upload-profile-pic", upload.single('profile_pic'), homeController.handleUploadFile)
     router.post('/upload-multiple-images', (req, res, next) => {
         upload_Multiple_Files(req, res, (err) => {

@@ -13,7 +13,9 @@
 <body>
     <div class="topnav">
         <a class="active" href="">Home</a>
-        <a href="/upload">Upload file </a>
+        <a href="/doctor">Doctor </a>
+        <a href="/appointment">Appointment </a>
+        <a href="/medical">Medical</a>
     </div>
 
     <div>
@@ -32,8 +34,9 @@
                     <th>user_id</th>
                     <th>name</th>
                     <th>gender</th>
-                    <th>phone</th>
+                    <th>age</th>
                     <th>address</th>
+                    <th>phone</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -53,6 +56,9 @@
                             <%=dataUser[i].gender%>
                         </td>
                         <td>
+                            <%=dataUser[i].age%>
+                        </td>
+                        <td>
                             <%=dataUser[i].address%>
                         </td>
                         <td>
@@ -60,13 +66,14 @@
                         </td>
                         <td style="display:flex;gap:15px">
                             <form>
-                                <a class="btn-detail" href="/detail/user/<%=dataUser[i].id%>" target="_blank">Detail</a>
+                                <a class="btn-detail" href="/detail/user/<%=dataUser[i].patient_id%>"
+                                    target="_blank">Detail</a>
                             </form>
-                            <form action="/edit-user/<%=dataUser[i].id%>" method="GET">
+                            <form action="/edit-user/<%=dataUser[i].patient_id%>" method="GET">
                                 <button type="submit">Edit</button>
                             </form>
                             <form action="/delete-user" method="POST">
-                                <input type="text" hidden value="<%=dataUser[i].id%>" name="userId">
+                                <input type="text" hidden value="<%=dataUser[i].patient_id%>" name="userId">
                                 <button type="submit">Delete</button>
                             </form>
                         </td>
@@ -88,12 +95,60 @@
                 <input type="text" name="gender" />
             </div>
             <div>
+                <label>age:</label>
+                <input type="text" name="age" />
+            </div>
+            <div>
                 <label>address:</label>
                 <input type="text" name="address" />
             </div>
             <div>
                 <label>phone:</label>
                 <input type="text" name="phone" />
+            </div>
+            <div>
+                <button type="submit" class="btn-submit">Submit</button>
+            </div>
+        </form>
+    </div>
+    <div class="create-doctor-container ">
+        <form action="/create-new-doctor" method="POST">
+            <div><b>create a new doctor:</b></div>
+            <div>
+                <label>email:</label>
+                <input type="text" name="email" />
+            </div>
+            <div>
+                <label>password:</label>
+                <input type="text" name="password" />
+            </div>
+            <div>
+                <label>name:</label>
+                <input type="text" name="name" />
+            </div>
+            <div>
+                <label>specialization:</label>
+                <input type="text" name="specialization" />
+            </div>
+            <div>
+                <label>phone:</label>
+                <input type="text" name="phone" />
+            </div>
+            <div>
+                <button type="submit" class="btn-submit">Submit</button>
+            </div>
+        </form>
+    </div>
+    <div class="login-container ">
+        <form action="/api/login" method="POST">
+            <div><b>Login:</b></div>
+            <div>
+                <label>Email:</label>
+                <input type="text" name="email" />
+            </div>
+            <div>
+                <label>password:</label>
+                <input type="text" name="password" />
             </div>
             <div>
                 <button type="submit" class="btn-submit">Submit</button>

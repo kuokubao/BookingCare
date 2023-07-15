@@ -3,12 +3,14 @@ import pool from '../configs/connectDB'
 import multer from 'multer';
 let getHomepage = (req, res) => {
     let data = [];
+    //let data_account = [];
     pool.query('SELECT * FROM patient ORDER BY patient_id', (err, results) => {
         if (err) throw err;
         results.rows.forEach(row => {
             data.push({
                 patient_id: row.patient_id,
                 address: row.address,
+                age: row.age,
                 gender: row.gender,
                 name: row.name,
                 phone: row.phone,
@@ -18,7 +20,60 @@ let getHomepage = (req, res) => {
         //  console.log(data);
         res.render("index.ejs", { dataUser: data });
     });
+
 };
+let getHomeDoctor = (req, res) => {
+    let doctor = [];
+    pool.query('SELECT * FROM doctor ORDER BY doctor_id', (err, results) => {
+        if (err) throw err;
+        results.rows.forEach(row => {
+            doctor.push({
+                doctor_id: row.doctor_id,
+                password: row.password,
+                name: row.name,
+                specialization: row.specialization,
+                phone: row.phone,
+                email: row.email,
+            });
+        });
+        res.render("doctor.ejs", { dataDoctor: doctor });
+    });
+}
+let getAppointment = (req, res) => {
+    let appointment = [];
+    pool.query('SELECT * FROM appointment ORDER BY  appointment_id', (err, results) => {
+        if (err) throw err;
+        results.rows.forEach(row => {
+            appointment.push({
+                appointment_id: row.appointment_id,
+                patient_id: row.patient_id,
+                appointment_date: row.appointment_date,
+                specialization: row.specialization,
+                appointment_time: row.appointment_time,
+                status: row.status,
+            });
+        });
+        res.render("appointment.ejs", { dataAppointment: appointment });
+    });
+}
+let getMeidicalRecord = (req, res) => {
+    let medical = [];
+    pool.query('SELECT * FROM medical_record ORDER BY  medical_record_id', (err, results) => {
+        if (err) throw err;
+        results.rows.forEach(row => {
+            medical.push({
+                medical_record_id: row.medical_record_id,
+                patient_id: row.patient_id,
+                doctor_id: row.doctor_id,
+                disease_id: row.disease_id,
+                diagnosis: row.diagnosis,
+                prescription: row.prescription,
+                notes: row.notes
+            });
+        });
+        res.render("medical.ejs", { dataMedical: medical });
+    });
+}
 let getDetailPage = async (req, res) => {
     let userId = req.params.patient_id;
     let user = await pool.query(`SELECT * FROM patient WHERE patient_id =$1`, [userId]);
@@ -28,8 +83,14 @@ let getDetailPage = async (req, res) => {
 //Thêm user
 let createNewUser = async (req, res) => {
     console.log(`check req`, req.body)
-    let { name, gender, address, phone } = req.body;
-    await pool.query(`insert into patient(name,gender,address,phone) values($1,$2,$3,$4)`, [name, gender, address, phone])
+    let { name, gender, age, address, phone } = req.body;
+    await pool.query(`insert into patient(name,gender,age,address,phone) values($1,$2,$3,$4,$5)`, [name, gender, age, address, phone])
+    return res.redirect('/')
+}
+let createNewDoctor = async (req, res) => {
+    console.log(`check req`, req.body)
+    let { email, password, name, specialization, phone } = req.body;
+    await pool.query(`insert into doctor( email,password,name,specialization,phone) values($1,$2,$3,$4,$5)`, [email, password, name, specialization, phone])
     return res.redirect('/')
 }
 //Xóa user
@@ -38,17 +99,39 @@ let deleteUser = async (req, res) => {
     await pool.query(`delete from patient where patient_id=$1`, [userId]);
     return res.redirect('/')//quay ve trang chu 
 }
+let deleteDoctor = async (req, res) => {
+    let doctor_id = req.body.doctor_id;
+    console.log(doctor_id)
+    await pool.query(`delete from doctor where doctor_id=$1`, [doctor_id]);
+    return res.redirect('/doctor')//quay ve trang chu 
+}
 let editUser = async (req, res) => {
     let id = req.params.patient_id //lay id nguoi dung
     let user = (await pool.query(`select *from patient where patient_id=$1`, [id])).rows[0];
-    return res.render('update.ejs', { dataUser: user }) //x<-y
+    // return res.render('update.ejs', { dataUser: user }) //x<-y
+}
+let editDoctor = async (req, res) => {
+    let id = req.params.doctor_id //lay id nguoi dung
+    let doctor = (await pool.query(`select *from doctor where doctor_id=$1`, [id])).rows[0];
+    return res.render('update.ejs', { dataDoctor: doctor }) //x<-y
 }
 let postUpdateUser = async (req, res) => {
-    let { name, gender, address, phone, patient_id } = req.body;
-    await pool.query(`update patient set name=$2,gender=$3,address=$4,phone=$5 where patient_id=$1`,
-        [patient_id, name, gender, address, phone])
+    let { name, gender, address, age, phone, patient_id } = req.body;
+    await pool.query(`update patient set name=$2,gender=$3,address=$4,phone=$5,age=$6 where patient_id=$1`,
+        [patient_id, name, gender, address, phone, age])
     return res.redirect('/')
 }
+let postUpdateDoctor = async (req, res) => {
+    let { name, specialization, phone, doctor_id } = req.body;
+    console.log(req.body);
+    await pool.query(
+        `UPDATE doctor SET name=$2, specialization=$3, phone=$4 WHERE doctor_id=$1`,
+        [doctor_id, name, specialization, phone]
+    );
+    return res.redirect('/doctor');
+};
+
+
 let getUploadFilePage = async (req, res) => {
     res.render('uploadfile.ejs');
 }
@@ -99,5 +182,6 @@ let handleUploadMultipleFiles = async (req, res) => {
 };
 module.exports = {
     getHomepage, getDetailPage, createNewUser, deleteUser, editUser, postUpdateUser,
-    getUploadFilePage, handleUploadFile, handleUploadMultipleFiles
+    getUploadFilePage, handleUploadFile, handleUploadMultipleFiles, createNewDoctor, getHomeDoctor, editDoctor,
+    postUpdateDoctor, deleteDoctor, getAppointment, getMeidicalRecord
 }
