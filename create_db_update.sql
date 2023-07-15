@@ -41,12 +41,15 @@ CREATE TABLE appointment (
   FOREIGN KEY (patient_id) REFERENCES patient(patient_id),
   FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id),
 );
+<<<<<<< HEAD
 ALTER TABLE appointment
 ADD COLUMN service_name VARCHAR(255);
 ALTER TABLE appointment
 ADD CONSTRAINT fk_appointment_service
 FOREIGN KEY (service_name) REFERENCES service(name);
 
+=======
+>>>>>>> 1c0716e974c2ec8440dba7de7278da127bae1d4d
 CREATE TABLE medical_record (
   medical_record_id serial PRIMARY KEY,
   patient_id INT,
@@ -149,6 +152,7 @@ VALUES
   (6, 4, 1, 'Chuan doan viem loi cho Do Thi Lan', 'Ke don Ke don khang sinh', 'Benh nhan can cai thien ve sinh rang mieng'),
   (9, 1, 1, 'Chuan doan Tieu duong cho Nguyen Van An', 'Ke don insulin hang ngay', 'Benh nhan can kiem tra duong huyet thuong xuyen'),
   (10, 5, 1, 'Chuan doan Can thi cho Tran Thi Bich', 'Ke don kinh ap trong', 'Benh nhan can kiem tra thi luc thuong xuyen');
+<<<<<<< HEAD
   -- Them du lieu vao bang "Dich vu"
 INSERT INTO service (name, doctor_specialization, description, fee)
 VALUES ('Kham tong quat', 'Noi khoa', 'Kham suc khoe tong quat cho benh nhan', 300000),
@@ -176,3 +180,5 @@ VALUES ('Kham tong quat', 'Noi khoa', 'Kham suc khoe tong quat cho benh nhan', 3
 ('Phau thuat da lieu', 'Da lieu', 'Phau thuat da lieu', 5000000),
 ('Kham noi tiet', 'Noi tiet', 'Kham va dieu tri cac benh noi tiet', 450000),
 ('Dieu tri tuyen giap', 'Noi tiet', 'Dieu tri cac benh lien quan den tuyen giap', 550000);
+=======
+>>>>>>> 1c0716e974c2ec8440dba7de7278da127bae1d4d
