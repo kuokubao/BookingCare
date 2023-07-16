@@ -41,15 +41,25 @@ CREATE TABLE appointment (
   FOREIGN KEY (patient_id) REFERENCES patient(patient_id),
   FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id),
 );
-<<<<<<< HEAD
 ALTER TABLE appointment
 ADD COLUMN service_name VARCHAR(255);
-ALTER TABLE appointment
-ADD CONSTRAINT fk_appointment_service
-FOREIGN KEY (service_name) REFERENCES service(name);
 
-=======
->>>>>>> 1c0716e974c2ec8440dba7de7278da127bae1d4d
+UPDATE appointment
+SET service_name = CASE appointment_id
+    WHEN 1 THEN 'Kham mui hong'
+    WHEN 2 THEN 'Cham soc thai phu'
+    WHEN 3 THEN 'Dieu tri rang ham mat'
+    WHEN 4 THEN 'Phau thuat ngoai khoa'
+    WHEN 5 THEN 'Kham noi tiet'
+    WHEN 6 THEN 'Phau thuat mat'
+    WHEN 7 THEN 'Kham benh da lieu'
+    WHEN 8 THEN 'Kham rang ham mat'
+    WHEN 9 THEN 'Chup X-quang'
+    WHEN 10 THEN 'Kham mat'
+    ELSE service_name
+END;
+
+
 CREATE TABLE medical_record (
   medical_record_id serial PRIMARY KEY,
   patient_id INT,
@@ -63,14 +73,12 @@ CREATE TABLE medical_record (
   FOREIGN KEY (disease_id) REFERENCES disease(disease_id) ON DELETE SET NULL
 
 );
-  CREATE TABLE service (
-    service_id serial PRIMARY KEY,
-    name VARCHAR(50) UNIQUE,
-    doctor_specialization VARCHAR(50),
-    description VARCHAR(100),
-    fee INT
-  );
-
+CREATE TABLE service (
+  service_id serial PRIMARY KEY,
+  name VARCHAR(50) UNIQUE,
+  specialization_id INT,
+  FOREIGN KEY (specialization_id) REFERENCES specialization(specialization_id)
+);
 
 -- Thêm dữ liệu vào bảng "Bác sĩ"
 INSERT INTO doctor (name, specialization, phone, email, password)
