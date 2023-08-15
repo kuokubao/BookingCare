@@ -31,7 +31,8 @@
             <thead>
                 <tr class="w3-light-grey">
                     <th>patient_id</th>
-                    <th>user_id</th>
+                    <th>email</th>
+                    <th>password</th>
                     <th>name</th>
                     <th>gender</th>
                     <th>age</th>
@@ -47,7 +48,10 @@
                             <%= dataUser[i].patient_id %>
                         </td>
                         <td>
-                            <%= dataUser[i].user_id %>
+                            <%= dataUser[i].email %>
+                        </td>
+                        <td>
+                            <%= dataUser[i].password %>
                         </td>
                         <td>
                             <%= dataUser[i].name%>
@@ -69,6 +73,10 @@
                                 <a class="btn-detail" href="/detail/user/<%=dataUser[i].patient_id%>"
                                     target="_blank">Detail</a>
                             </form>
+                            <form>
+                                <a class="btn-detail" href="/detail/appointment/<%=dataUser[i].patient_id%>"
+                                    target="_blank">DetailAppointment</a>
+                            </form>
                             <form action="/edit-user/<%=dataUser[i].patient_id%>" method="GET">
                                 <button type="submit">Edit</button>
                             </form>
@@ -87,16 +95,24 @@
         <form action="/create-new-user" method="POST">
             <div><b>create a new user:</b></div>
             <div>
+                <label>email:</label>
+                <input type="text" name="email" />
+            </div>
+            <div>
+                <label>password:</label>
+                <input type="text" name="password" />
+            </div>
+            <div>
                 <label>name:</label>
                 <input type="text" name="name" />
             </div>
             <div>
-                <label>gender:</label>
-                <input type="text" name="gender" />
-            </div>
-            <div>
                 <label>age:</label>
                 <input type="text" name="age" />
+            </div>
+            <div>
+                <label>gender:</label>
+                <input type="text" name="gender" />
             </div>
             <div>
                 <label>address:</label>
@@ -128,7 +144,7 @@
             </div>
             <div>
                 <label>specialization:</label>
-                <input type="text" name="specialization" />
+                <input type="text" name="specialization_id" />
             </div>
             <div>
                 <label>phone:</label>
@@ -140,8 +156,8 @@
         </form>
     </div>
     <div class="login-container ">
-        <form action="/api/login" method="POST">
-            <div><b>Login:</b></div>
+        <form action="/api/login1" method="POST">
+            <div><b>Login-patient:</b></div>
             <div>
                 <label>Email:</label>
                 <input type="text" name="email" />
@@ -153,8 +169,22 @@
             <div>
                 <button type="submit" class="btn-submit">Submit</button>
             </div>
-        </form>
-    </div>
+            <div class="login-container1 ">
+                <form action="/login" method="POST">
+                    <div><b>Login:</b></div>
+                    <div>
+                        <label>Email:</label>
+                        <input type="text" name="email" />
+                    </div>
+                    <div>
+                        <label>password:</label>
+                        <input type="text" name="password" />
+                    </div>
+                    <div>
+                        <button type="submit" class="btn-submit">Submit</button>
+                    </div>
+                </form>
+            </div>
 </body>
 
 </html>

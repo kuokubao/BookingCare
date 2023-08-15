@@ -77,6 +77,38 @@
             </tbody>
         </table>
     </div>
+    <div class="create-user-container ">
+        <form action="/create-new-appointment" method="POST">
+            <div><b>create a appointment:</b></div>
+            <div>
+                <label>patient_id:</label>
+                <input type="text" name="patient_id" />
+            </div>
+            <div>
+                <label>doctor_id:</label>
+                <input type="text" name="doctor_id" />
+            </div>
+            <div>
+                <label>appointment_date:</label>
+                <input type="text" name="appointment_date" />
+            </div>
+            <div>
+                <label>appointment_time:</label>
+                <input type="text" name="appointment_time" />
+            </div>
+            <div>
+                <label>status:</label>
+                <input type="text" name="status" />
+            </div>
+            <div>
+                <label>service_name:</label>
+                <input type="text" name="service_name" />
+            </div>
+            <div>
+                <button type="submit" class="btn-submit">Submit</button>
+            </div>
+        </form>
+    </div>
 </div>
 </body>
 

@@ -9,12 +9,13 @@ let getHomepage = (req, res) => {
         results.rows.forEach(row => {
             data.push({
                 patient_id: row.patient_id,
-                address: row.address,
+                email: row.email,
+                password: row.password,
+                name: row.name,
                 age: row.age,
                 gender: row.gender,
-                name: row.name,
+                address: row.address,
                 phone: row.phone,
-                user_id: row.user_id
             });
         });
         //  console.log(data);
@@ -27,18 +28,29 @@ let getHomeDoctor = (req, res) => {
     pool.query('SELECT * FROM doctor ORDER BY doctor_id', (err, results) => {
         if (err) throw err;
         results.rows.forEach(row => {
-            doctor.push({
-                doctor_id: row.doctor_id,
-                password: row.password,
-                name: row.name,
-                specialization: row.specialization,
-                phone: row.phone,
-                email: row.email,
+            // Lấy thông tin chuyên khoa của bác sĩ
+            pool.query('SELECT name FROM specialization WHERE specialization_id = $1', [row.specialization_id], (err, specializationResult) => {
+                if (err) throw err;
+                const specializationName = specializationResult.rows[0].name;
+                doctor.push({
+                    doctor_id: row.doctor_id,
+                    password: row.password,
+                    name: row.name,
+                    specialization_id: row.specialization_id,
+                    specialization: specializationName, // Thêm thông tin chuyên khoa vào đây
+                    phone: row.phone,
+                    email: row.email,
+                });
+
+                // Kiểm tra xem đã duyệt qua tất cả các bác sĩ hay chưa
+                if (doctor.length === results.rows.length) {
+                    res.render("doctor.ejs", { dataDoctor: doctor });
+                }
             });
         });
-        res.render("doctor.ejs", { dataDoctor: doctor });
     });
 }
+
 let getAppointment = (req, res) => {
     let appointment = [];
     pool.query('SELECT * FROM appointment ORDER BY  appointment_id', (err, results) => {
@@ -74,23 +86,35 @@ let getMeidicalRecord = (req, res) => {
         res.render("medical.ejs", { dataMedical: medical });
     });
 }
-let getDetailPage = async (req, res) => {
+let getDetailPatient = async (req, res) => {
     let userId = req.params.patient_id;
     let user = await pool.query(`SELECT * FROM patient WHERE patient_id =$1`, [userId]);
+    // console.log('check request params', user.rowsơ0);
+    return res.send(JSON.stringify(user.rows[0]));
+}
+let getDetailAppointment = async (req, res) => {
+    let userId = req.params.patient_id;
+    let user = await pool.query(`SELECT * FROM appointment WHERE patient_id =$1`, [userId]);
     // console.log('check request params', user.rowsơ0);
     return res.send(JSON.stringify(user.rows[0]));
 }
 //Thêm user
 let createNewUser = async (req, res) => {
     console.log(`check req`, req.body)
-    let { name, gender, age, address, phone } = req.body;
-    await pool.query(`insert into patient(name,gender,age,address,phone) values($1,$2,$3,$4,$5)`, [name, gender, age, address, phone])
+    let { email, password, name, gender, age, address, phone } = req.body;
+    await pool.query(`insert into patient(email,password,name,gender,age,address,phone) values($1,$2,$3,$4,$5,$6,$7)`, [email, password, name, gender, age, address, phone])
+    return res.redirect('/')
+}
+let createAppointment = async (req, res) => {
+    console.log(`check req`, req.body)
+    let { patient_id, doctor_id, appointment_date, appointment_time, status, service_name } = req.body;
+    await pool.query(`insert into appointment(patient_id,doctor_id,appointment_date,appointment_time,status,service_name) values($1,$2,$3,$4,$5,$6)`, [patient_id, doctor_id, appointment_date, appointment_time, status, service_name])
     return res.redirect('/')
 }
 let createNewDoctor = async (req, res) => {
     console.log(`check req`, req.body)
-    let { email, password, name, specialization, phone } = req.body;
-    await pool.query(`insert into doctor( email,password,name,specialization,phone) values($1,$2,$3,$4,$5)`, [email, password, name, specialization, phone])
+    let { email, password, name, specialization_id, phone } = req.body;
+    await pool.query(`insert into doctor( email,password,name,specialization_id,phone) values($1,$2,$3,$4,$5)`, [email, password, name, specialization_id, phone])
     return res.redirect('/')
 }
 //Xóa user
@@ -108,7 +132,7 @@ let deleteDoctor = async (req, res) => {
 let editUser = async (req, res) => {
     let id = req.params.patient_id //lay id nguoi dung
     let user = (await pool.query(`select *from patient where patient_id=$1`, [id])).rows[0];
-    // return res.render('update.ejs', { dataUser: user }) //x<-y
+    return res.render('updateUser.ejs', { dataUser: user }) //x<-y
 }
 let editDoctor = async (req, res) => {
     let id = req.params.doctor_id //lay id nguoi dung
@@ -116,17 +140,17 @@ let editDoctor = async (req, res) => {
     return res.render('update.ejs', { dataDoctor: doctor }) //x<-y
 }
 let postUpdateUser = async (req, res) => {
-    let { name, gender, address, age, phone, patient_id } = req.body;
-    await pool.query(`update patient set name=$2,gender=$3,address=$4,phone=$5,age=$6 where patient_id=$1`,
-        [patient_id, name, gender, address, phone, age])
+    let { password, name, age, gender, address, phone, patient_id } = req.body;
+    await pool.query(`update patient set password=$2,name=$3,gender=$4,address=$5,phone=$6,age=$7 where patient_id=$1`,
+        [patient_id, password, name, gender, address, phone, age])
     return res.redirect('/')
 }
 let postUpdateDoctor = async (req, res) => {
-    let { name, specialization, phone, doctor_id } = req.body;
+    let { name, phone, doctor_id } = req.body;
     console.log(req.body);
     await pool.query(
-        `UPDATE doctor SET name=$2, specialization=$3, phone=$4 WHERE doctor_id=$1`,
-        [doctor_id, name, specialization, phone]
+        `UPDATE doctor SET name=$2, phone=$3 WHERE doctor_id=$1`,
+        [doctor_id, name, phone]
     );
     return res.redirect('/doctor');
 };
@@ -181,7 +205,7 @@ let handleUploadMultipleFiles = async (req, res) => {
     res.send(result);
 };
 module.exports = {
-    getHomepage, getDetailPage, createNewUser, deleteUser, editUser, postUpdateUser,
+    getHomepage, getDetailPatient, createNewUser, deleteUser, editUser, postUpdateUser,
     getUploadFilePage, handleUploadFile, handleUploadMultipleFiles, createNewDoctor, getHomeDoctor, editDoctor,
-    postUpdateDoctor, deleteDoctor, getAppointment, getMeidicalRecord
+    postUpdateDoctor, deleteDoctor, getAppointment, getMeidicalRecord, getDetailAppointment, createAppointment
 }

@@ -20,10 +20,24 @@ CREATE TABLE doctor (
   doctor_id serial PRIMARY KEY,
   password VARCHAR(30),
   name VARCHAR(30),
-  specialization VARCHAR(50),
+  specialization_id INT,
   phone VARCHAR(10),
   email VARCHAR(50) UNIQUE
 );
+-- Xóa cột specialization từ bảng doctor
+ALTER TABLE doctor
+DROP COLUMN specialization;
+
+-- Thêm cột specialization_id vào bảng doctor
+ALTER TABLE doctor
+ADD COLUMN specialization_id INT;
+
+-- Thêm ràng buộc khóa ngoại tới bảng specialization
+ALTER TABLE doctor
+ADD CONSTRAINT fk_doctor_specialization
+    FOREIGN KEY (specialization_id)
+    REFERENCES specialization(specialization_id);
+
 
 CREATE TABLE disease (
   disease_id serial PRIMARY KEY,
@@ -77,9 +91,14 @@ CREATE TABLE service (
   service_id serial PRIMARY KEY,
   name VARCHAR(50) UNIQUE,
   specialization_id INT,
+  description VARCHAR(100),
+  fee INT,
   FOREIGN KEY (specialization_id) REFERENCES specialization(specialization_id)
 );
-
+CREATE TABLE specialization (
+  specialization_id serial PRIMARY KEY,
+  name VARCHAR(50) UNIQUE
+);
 -- Thêm dữ liệu vào bảng "Bác sĩ"
 INSERT INTO doctor (name, specialization, phone, email, password)
 VALUES 
