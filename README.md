@@ -33,7 +33,8 @@ This is a specialized web platform designed for managing patient-doctor appointm
 - Have the authority to edit personal information of patients, doctors, and medical records based on each entity's ID.
 - View and analyze medical records and appointments by month and day.
 ## ERD
-<img width="788" alt="image" src="https://github.com/kuokubao/Learn_code/assets/109888400/3e329345-7a33-471c-a115-87a934b083f0">
+<img width="1138" alt="image" src="https://github.com/kuokubao/Learn_code/assets/109888400/b3569d19-863b-4155-a304-afb1a82a9fe1">
+
 
 
 ## Demo-web
