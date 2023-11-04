@@ -38,13 +38,19 @@ This is a specialized web platform designed for managing patient-doctor appointm
 
 
 ## Demo-web
+Login
 <img width="1193" alt="image" src="https://github.com/kuokubao/BookingCare/assets/109888400/84c3bc95-0e4a-47b7-ac05-8b471f1b0512">
-
+Home page
 <img width="1254" alt="image" src="https://github.com/kuokubao/BookingCare/assets/109888400/21cbe91d-dfaf-447e-bb86-26503b8f26a2">
+sign up
 <img width="798" alt="image" src="https://github.com/kuokubao/BookingCare/assets/109888400/e820f5a6-3d3a-4fc0-b47a-b6174755822d">
+appointment data
 <img width="1255" alt="image" src="https://github.com/kuokubao/BookingCare/assets/109888400/b8d828c6-e5d0-4f3e-aa55-b15c9ba68c53">
+medical data
 <img width="1264" alt="image" src="https://github.com/kuokubao/BookingCare/assets/109888400/7a5404f9-3b42-4695-ad31-953da0941d69">
+update user
 <img width="1234" alt="image" src="https://github.com/kuokubao/BookingCare/assets/109888400/4f5dfcc6-6b4b-4b5b-9128-4dd300f9cfe9">
+add doctor
 <img width="1281" alt="image" src="https://github.com/kuokubao/BookingCare/assets/109888400/f193c905-0853-4af4-b2cf-7a06b4edc2dc">
 <img width="1275" alt="image" src="https://github.com/kuokubao/BookingCare/assets/109888400/b01e1c91-69ef-4d5f-9a2c-432a175a6b1e">
 <img width="1273" alt="image" src="https://github.com/kuokubao/BookingCare/assets/109888400/b4a0e361-1015-4b04-b094-1b4b8a7b37a8">
